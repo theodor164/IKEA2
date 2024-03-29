@@ -626,3 +626,57 @@ $(document).on("click", ".deleteDepartmentBtn", function () {
     },
   });
 });
+
+$(document).on("click", ".deleteLocationBtn", function () {
+  // AJAX call to delete location
+
+  // AJAX call to get all departments and check if the id of the location exists in one of the departments
+  // If it does, then don't delete the location
+  // If it doesn't, then delete the location
+  const locationID = $(this).attr("data-id");
+
+  $.ajax({
+    url: "getAllDepartments.php",
+    type: "GET",
+    dataType: "json",
+    success: function (result) {
+      var resultCode = result.status.code;
+      if (resultCode == 200) {
+        var departmentExist = false;
+        result.data.forEach(function (item) {
+          if (parseInt(item.locationID) === parseInt(locationID)) {
+            departmentExist = true;
+            return;
+          }
+        });
+        if (departmentExist) {
+          alert("Cannot delete location as departments exist");
+        } else {
+          $.ajax({
+            url: "deleteLocationByID.php",
+            type: "POST",
+            data: {
+              id: locationID,
+            },
+            success: function (result) {
+              var resultCode = result.status.code;
+              if (resultCode == 200) {
+                $("#refreshBtn").click();
+              } else {
+                alert("Error deleting data");
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              alert("Error deleting data");
+            },
+          });
+        }
+      } else {
+        alert("Error deleting data");
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      alert("Error deleting data");
+    },
+  });
+});

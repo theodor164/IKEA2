@@ -550,3 +550,79 @@ $("#editLocationForm").on("submit", function (e) {
     },
   });
 });
+
+$(document).on("click", ".deletePersonnelBtn", function () {
+  // AJAX call to delete personnel
+  $.ajax({
+    url: "deletePersonnelByID.php",
+    type: "POST",
+    data: {
+      id: $(this).attr("data-id"),
+    },
+    success: function (result) {
+      var resultCode = result.status.code;
+      if (resultCode == 200) {
+        $("#refreshBtn").click();
+      } else {
+        alert("Error deleting data");
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      alert("Error deleting data");
+    },
+  });
+});
+
+$(document).on("click", ".deleteDepartmentBtn", function () {
+  // AJAX call to delete department
+
+  // AJAX call to get all personnel and check if the id of the department exists in one of the personnel
+  // If it does, then don't delete the department
+  // If it doesn't, then delete the department
+  const departmentID = $(this).attr("data-id");
+
+  $.ajax({
+    url: "getAll.php",
+    type: "GET",
+    dataType: "json",
+    success: function (result) {
+      var resultCode = result.status.code;
+      if (resultCode == 200) {
+        var personnelExist = false;
+        result.data.forEach(function (item) {
+          if (parseInt(item.departmentID) === parseInt(departmentID)) {
+            personnelExist = true;
+            return;
+          }
+        });
+        if (personnelExist) {
+          alert("Cannot delete department as personnel exist");
+        } else {
+          $.ajax({
+            url: "deleteDepartmentByID.php",
+            type: "POST",
+            data: {
+              id: departmentID,
+            },
+            success: function (result) {
+              var resultCode = result.status.code;
+              if (resultCode == 200) {
+                $("#refreshBtn").click();
+              } else {
+                alert("Error deleting data");
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              alert("Error deleting data");
+            },
+          });
+        }
+      } else {
+        alert("Error deleting data");
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      alert("Error deleting data");
+    },
+  });
+});

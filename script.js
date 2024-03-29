@@ -225,7 +225,6 @@ $("#filterBtn").click(function () {
     dataType: "json",
     success: function (result) {
       // Handle success response
-      console.log("Department data loaded successfully."); // Debugging statement
       var resultCode = result.status.code;
       if (resultCode == 200) {
         $("#filterDepartment").html("");
@@ -243,7 +242,6 @@ $("#filterBtn").click(function () {
     },
     error: function (jqXHR, textStatus, errorThrown) {
       // Handle error response
-      console.log("Error loading department data:", textStatus, errorThrown); // Debugging statement
       $("#filterDepartment").html("<option>An error occurred</option>");
     },
   });
@@ -256,7 +254,6 @@ $("#filterBtn").click(function () {
         departmentID: $("#filterDepartment").val(),
       },
       success: function (result) {
-        console.log(result);
         var resultCode = result.status.code;
         if (resultCode == 200) {
           $("#filterModal").modal("hide");
@@ -307,12 +304,10 @@ $("#filterBtn").click(function () {
 
 // Add event listener to handle changes in the radio button selection
 $("input[name='filterBy']").change(function () {
-  console.log("Radio button change detected."); // Debugging statement
   if ($("#filterByDepartment").is(":checked")) {
     $("#filterForm").off("submit");
     $("#departmentFilter").css("display", "block");
     $("#locationFilter").css("display", "none");
-    console.log("Filter by department selected."); // Debugging statement
     // Load department data
     $.ajax({
       url: "getAllDepartments.php",
@@ -320,7 +315,6 @@ $("input[name='filterBy']").change(function () {
       dataType: "json",
       success: function (result) {
         // Handle success response
-        console.log("Department data loaded successfully."); // Debugging statement
         var resultCode = result.status.code;
         if (resultCode == 200) {
           $("#filterDepartment").html("");
@@ -338,7 +332,6 @@ $("input[name='filterBy']").change(function () {
       },
       error: function (jqXHR, textStatus, errorThrown) {
         // Handle error response
-        console.log("Error loading department data:", textStatus, errorThrown); // Debugging statement
         $("#filterDepartment").html("<option>An error occurred</option>");
       },
     });
@@ -352,7 +345,6 @@ $("input[name='filterBy']").change(function () {
           departmentID: $("#filterDepartment").val(),
         },
         success: function (result) {
-          console.log(result);
           var resultCode = result.status.code;
           if (resultCode == 200) {
             $("#filterModal").modal("hide");
@@ -400,7 +392,6 @@ $("input[name='filterBy']").change(function () {
       });
     });
   } else {
-    console.log("Filter by location selected."); // Debugging statement
     // Load location data
     $("#filterForm").off("submit");
     $("#departmentFilter").css("display", "none");
@@ -411,7 +402,6 @@ $("input[name='filterBy']").change(function () {
       dataType: "json",
       success: function (result) {
         // Handle success response
-        console.log("Location data loaded successfully."); // Debugging statement
         var resultCode = result.status.code;
         if (resultCode == 200) {
           $("#filterLocation").html("");
@@ -429,7 +419,6 @@ $("input[name='filterBy']").change(function () {
       },
       error: function (jqXHR, textStatus, errorThrown) {
         // Handle error response
-        console.log("Error loading location data:", textStatus, errorThrown); // Debugging statement
         $("#filterLocation").html("<option>An error occurred</option>");
       },
     });
@@ -443,7 +432,6 @@ $("input[name='filterBy']").change(function () {
           locationID: $("#filterLocation").val(),
         },
         success: function (result) {
-          console.log(result);
           var resultCode = result.status.code;
           if (resultCode == 200) {
             $("#filterModal").modal("hide");

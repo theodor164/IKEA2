@@ -878,23 +878,31 @@ $("#editLocationForm").on("submit", function (e) {
 
 $(document).on("click", ".deletePersonnelBtn", function () {
   // AJAX call to delete personnel
-  $.ajax({
-    url: "deletePersonnelByID.php",
-    type: "POST",
-    data: {
-      id: $(this).attr("data-id"),
-    },
-    success: function (result) {
-      var resultCode = result.status.code;
-      if (resultCode == 200) {
-        $("#refreshBtn").click();
-      } else {
+
+  const personnelID = $(this).attr("data-id");
+
+  $("#deletePersonnelModal").modal("show");
+
+  $("#deletePersonnelBtn").click(function () {
+    $.ajax({
+      url: "deletePersonnelByID.php",
+      type: "POST",
+      data: {
+        id: personnelID,
+      },
+      success: function (result) {
+        var resultCode = result.status.code;
+        if (resultCode == 200) {
+          $("#refreshBtn").click();
+          $("#deletePersonnelModal").modal("hide");
+        } else {
+          alert("Error deleting data");
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
         alert("Error deleting data");
-      }
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      alert("Error deleting data");
-    },
+      },
+    });
   });
 });
 
@@ -905,50 +913,55 @@ $(document).on("click", ".deleteDepartmentBtn", function () {
   // If it does, then don't delete the department
   // If it doesn't, then delete the department
   const departmentID = $(this).attr("data-id");
+  $("#deleteDepartmentModal").modal("show");
 
-  $.ajax({
-    url: "getAll.php",
-    type: "GET",
-    dataType: "json",
-    success: function (result) {
-      var resultCode = result.status.code;
-      if (resultCode == 200) {
-        var personnelExist = false;
-        result.data.forEach(function (item) {
-          if (parseInt(item.departmentID) === parseInt(departmentID)) {
-            personnelExist = true;
-            return;
-          }
-        });
-        if (personnelExist) {
-          alert("Cannot delete department as personnel exist");
-        } else {
-          $.ajax({
-            url: "deleteDepartmentByID.php",
-            type: "POST",
-            data: {
-              id: departmentID,
-            },
-            success: function (result) {
-              var resultCode = result.status.code;
-              if (resultCode == 200) {
-                $("#refreshBtn").click();
-              } else {
-                alert("Error deleting data");
-              }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-              alert("Error deleting data");
-            },
+  $("#deleteDepartmentBtn").click(function () {
+    $.ajax({
+      url: "getAll.php",
+      type: "GET",
+      dataType: "json",
+      success: function (result) {
+        var resultCode = result.status.code;
+        if (resultCode == 200) {
+          var personnelExist = false;
+          result.data.forEach(function (item) {
+            if (parseInt(item.departmentID) === parseInt(departmentID)) {
+              personnelExist = true;
+              return;
+            }
           });
+          if (personnelExist) {
+            alert("Cannot delete department as personnel exist");
+            $("#deleteDepartmentModal").modal("hide");
+          } else {
+            $.ajax({
+              url: "deleteDepartmentByID.php",
+              type: "POST",
+              data: {
+                id: departmentID,
+              },
+              success: function (result) {
+                var resultCode = result.status.code;
+                if (resultCode == 200) {
+                  $("#refreshBtn").click();
+                  $("#deleteDepartmentModal").modal("hide");
+                } else {
+                  alert("Error deleting data");
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error deleting data");
+              },
+            });
+          }
+        } else {
+          alert("Error deleting data");
         }
-      } else {
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
         alert("Error deleting data");
-      }
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      alert("Error deleting data");
-    },
+      },
+    });
   });
 });
 
@@ -959,49 +972,53 @@ $(document).on("click", ".deleteLocationBtn", function () {
   // If it does, then don't delete the location
   // If it doesn't, then delete the location
   const locationID = $(this).attr("data-id");
+  $("#deleteLocationModal").modal("show");
 
-  $.ajax({
-    url: "getAllDepartments.php",
-    type: "GET",
-    dataType: "json",
-    success: function (result) {
-      var resultCode = result.status.code;
-      if (resultCode == 200) {
-        var departmentExist = false;
-        result.data.forEach(function (item) {
-          if (parseInt(item.locationID) === parseInt(locationID)) {
-            departmentExist = true;
-            return;
-          }
-        });
-        if (departmentExist) {
-          alert("Cannot delete location as departments exist");
-        } else {
-          $.ajax({
-            url: "deleteLocationByID.php",
-            type: "POST",
-            data: {
-              id: locationID,
-            },
-            success: function (result) {
-              var resultCode = result.status.code;
-              if (resultCode == 200) {
-                $("#refreshBtn").click();
-              } else {
-                alert("Error deleting data");
-              }
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-              alert("Error deleting data");
-            },
+  $("#deleteLocationBtn").click(function () {
+    $.ajax({
+      url: "getAllDepartments.php",
+      type: "GET",
+      dataType: "json",
+      success: function (result) {
+        var resultCode = result.status.code;
+        if (resultCode == 200) {
+          var departmentExist = false;
+          result.data.forEach(function (item) {
+            if (parseInt(item.locationID) === parseInt(locationID)) {
+              departmentExist = true;
+              return;
+            }
           });
+          if (departmentExist) {
+            alert("Cannot delete location as departments exist");
+          } else {
+            $.ajax({
+              url: "deleteLocationByID.php",
+              type: "POST",
+              data: {
+                id: locationID,
+              },
+              success: function (result) {
+                var resultCode = result.status.code;
+                if (resultCode == 200) {
+                  $("#refreshBtn").click();
+                  $("#deleteLocationModal").modal("hide");
+                } else {
+                  alert("Error deleting data");
+                }
+              },
+              error: function (jqXHR, textStatus, errorThrown) {
+                alert("Error deleting data");
+              },
+            });
+          }
+        } else {
+          alert("Error deleting data");
         }
-      } else {
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
         alert("Error deleting data");
-      }
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      alert("Error deleting data");
-    },
+      },
+    });
   });
 });

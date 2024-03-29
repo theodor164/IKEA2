@@ -204,6 +204,98 @@
     </section>
 
     <div
+      id="filterModal"
+      class="modal fade"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content shadow">
+          <div class="modal-header bg-primary bg-gradient text-white">
+            <h5 class="modal-title">Filter Modal</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <!-- Add your form or content here -->
+            <form id="filterForm">
+              <!-- Add radio buttons or dropdown for filter selection -->
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="filterBy"
+                  id="filterByDepartment"
+                  value="department"
+                  checked
+                />
+                <label class="form-check-label" for="filterByDepartment">
+                  Filter by Department
+                </label>
+              </div>
+              <div class="form-check" style="margin-bottom: 16px;">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="filterBy"
+                  id="filterByLocation"
+                  value="location"
+                />
+                <label class="form-check-label" for="filterByLocation">
+                  Filter by Location
+                </label>
+              </div>
+              <!-- Add your form fields here based on the selected filter criteria -->
+              <div class="form-floating" id="departmentFilter">
+                <select
+                  class="form-select"
+                  id="filterDepartment"
+                  placeholder="Department"
+                ></select>
+                <label for="filterDepartment">Department</label>
+              </div>
+              <div
+                class="form-floating"
+                id="locationFilter"
+                style="display: none"
+              >
+                <select
+                  class="form-select"
+                  id="filterLocation"
+                  placeholder="Location"
+                ></select>
+                <label for="filterLocation">Location</label>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="submit"
+              form="filterForm"
+              class="btn btn-outline-primary btn-sm myBtn"
+              id="filterSaveBtn"
+            >
+              SAVE
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm myBtn"
+              data-bs-dismiss="modal"
+            >
+              CANCEL
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
       id="addLocationModal"
       class="modal fade"
       tabindex="-1"

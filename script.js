@@ -1,5 +1,66 @@
 $("#searchInp").on("keyup", function () {
   // your code
+
+  var value = $(this).val().toLowerCase();
+  if ($("#departmentsBtn").hasClass("active")) {
+    $("#departmentTableBody tr").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  }
+  if ($("#locationsBtn").hasClass("active")) {
+    $("#locationTableBody tr").filter(function () {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+    });
+  }
+
+  $.ajax({
+    url: "SearchAll.php",
+    type: "POST",
+    dataType: "json",
+    data: {
+      txt: value,
+    },
+    success: function (result) {
+      var resultCode = result.status.code;
+      if (resultCode == 200) {
+        if ($("#personnelBtn").hasClass("active")) {
+          $("#personnelTableBody").html("");
+          $.each(result.data.found, function () {
+            $("#personnelTableBody").append(
+              '<tr><td class="align-middle text-nowrap">' +
+                this.lastName +
+                ", " +
+                this.firstName +
+                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                this.jobTitle +
+                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                this.locationName +
+                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                this.email +
+                `</td><td class="text-end text-nowrap"><button
+              type="button"
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#editPersonnelModal"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-pencil fa-fw"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm deletePersonnelBtn"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-trash fa-fw"></i>
+            </button>
+          </td>
+        </tr>`
+            );
+          });
+        }
+      }
+    },
+  });
 });
 
 $("#refreshBtn").click(function () {
@@ -153,7 +214,164 @@ $("#refreshBtn").click(function () {
 });
 
 $("#filterBtn").click(function () {
-  // Open a modal of your own design that allows the user to apply a filter to the personnel table on either department or location
+  // Open the filter modal
+  $("#filterModal").modal("show");
+  $.ajax({
+    url: "getAllDepartments.php",
+    type: "GET",
+    dataType: "json",
+    success: function (result) {
+      // Handle success response
+      console.log("Department data loaded successfully."); // Debugging statement
+      var resultCode = result.status.code;
+      if (resultCode == 200) {
+        $("#filterDepartment").html("");
+        $.each(result.data, function () {
+          $("#filterDepartment").append(
+            $("<option>", {
+              value: this.id,
+              text: this.name,
+            })
+          );
+        });
+      } else {
+        $("#filterDepartment").html("<option>No data available</option>");
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      // Handle error response
+      console.log("Error loading department data:", textStatus, errorThrown); // Debugging statement
+      $("#filterDepartment").html("<option>An error occurred</option>");
+    },
+  });
+  $("#filterForm").submit(function (e) {
+    e.preventDefault();
+    $.ajax({
+      url: "filterByDepartment.php",
+      type: "POST",
+      data: {
+        departmentID: $("#filterDepartment").val(),
+      },
+      success: function (result) {
+        console.log(result);
+        var resultCode = result.status.code;
+        if (resultCode == 200) {
+          $("#filterModal").modal("hide");
+          $("#personnelTableBody").html("");
+
+          $.each(result.data, function () {
+            $("#personnelTableBody").append(
+              '<tr><td class="align-middle text-nowrap">' +
+                this.lastName +
+                ", " +
+                this.firstName +
+                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                this.jobTitle +
+                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                this.location +
+                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                this.email +
+                `</td><td class="text-end text-nowrap"><button
+              type="button"
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#editPersonnelModal"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-pencil fa-fw"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm deletePersonnelBtn"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-trash fa-fw"></i>
+            </button>
+          </td>
+        </tr>`
+            );
+          });
+        } else {
+          $("#filterModal .modal-title").replaceWith("Error saving data");
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#filterModal .modal-title").replaceWith("Error saving data");
+      },
+    });
+  });
+});
+
+// Add event listener to handle changes in the radio button selection
+$("input[name='filterBy']").change(function () {
+  console.log("Radio button change detected."); // Debugging statement
+  if ($("#filterByDepartment").is(":checked")) {
+    $("#departmentFilter").css("display", "block");
+    $("#locationFilter").css("display", "none");
+    console.log("Filter by department selected."); // Debugging statement
+    // Load department data
+    $.ajax({
+      url: "getAllDepartments.php",
+      type: "GET",
+      dataType: "json",
+      success: function (result) {
+        // Handle success response
+        console.log("Department data loaded successfully."); // Debugging statement
+        var resultCode = result.status.code;
+        if (resultCode == 200) {
+          $("#filterDepartment").html("");
+          $.each(result.data, function () {
+            $("#filterDepartment").append(
+              $("<option>", {
+                value: this.id,
+                text: this.name,
+              })
+            );
+          });
+        } else {
+          $("#filterDepartment").html("<option>No data available</option>");
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Handle error response
+        console.log("Error loading department data:", textStatus, errorThrown); // Debugging statement
+        $("#filterDepartment").html("<option>An error occurred</option>");
+      },
+    });
+  } else {
+    console.log("Filter by location selected."); // Debugging statement
+    // Load location data
+    $("#departmentFilter").css("display", "none");
+    $("#locationFilter").css("display", "block");
+    $.ajax({
+      url: "getAllLocations.php",
+      type: "GET",
+      dataType: "json",
+      success: function (result) {
+        // Handle success response
+        console.log("Location data loaded successfully."); // Debugging statement
+        var resultCode = result.status.code;
+        if (resultCode == 200) {
+          $("#filterLocation").html("");
+          $.each(result.data, function () {
+            $("#filterLocation").append(
+              $("<option>", {
+                value: this.id,
+                text: this.name,
+              })
+            );
+          });
+        } else {
+          $("#filterLocation").html("<option>No data available</option>");
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        // Handle error response
+        console.log("Error loading location data:", textStatus, errorThrown); // Debugging statement
+        $("#filterLocation").html("<option>An error occurred</option>");
+      },
+    });
+  }
 });
 
 $("#addBtn").click(function () {

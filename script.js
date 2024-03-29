@@ -203,7 +203,6 @@ $("#addBtn").click(function () {
               }
             });
           }
-          console.log(maxId);
           $.ajax({
             url: "insertPersonnel.php",
             type: "POST",
@@ -219,6 +218,7 @@ $("#addBtn").click(function () {
               var resultCode = result.status.code;
               if (resultCode == 200) {
                 $("#addPersonnelModal").modal("hide");
+                $("#addPersonnelForm").off("submit");
                 $("#refreshBtn").click();
               } else {
                 $("#addPersonnelModal .modal-title").replaceWith(
@@ -243,8 +243,92 @@ $("#addBtn").click(function () {
   } else {
     if ($("#departmentsBtn").hasClass("active")) {
       $("#addDepartmentModal").modal("show");
+      $.ajax({
+        url: "getAllLocations.php",
+        type: "GET",
+        dataType: "json",
+        success: function (result) {
+          var resultCode = result.status.code;
+          if (resultCode == 200) {
+            $("#addDepartmentLocation").html("");
+            $.each(result.data, function () {
+              $("#addDepartmentLocation").append(
+                $("<option>", {
+                  value: this.id,
+                  text: this.name,
+                })
+              );
+            });
+          } else {
+            $("#addDepartmentLocation").html(
+              "<option>No data available</option>"
+            );
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          $("#addDepartmentLocation").html(
+            "<option>An error occurred</option>"
+          );
+        },
+      });
+
+      $("#addDepartmentForm").on("submit", function (e) {
+        e.preventDefault();
+        $.ajax({
+          url: "insertDepartment.php",
+          type: "POST",
+          data: {
+            name: $("#addDepartmentName").val(),
+            locationID: $("#addDepartmentLocation").val(),
+          },
+          success: function (result) {
+            var resultCode = result.status.code;
+            if (resultCode == 200) {
+              $("#addDepartmentModal").modal("hide");
+              $("#addDepartmentForm").off("submit");
+              $("#refreshBtn").click();
+            } else {
+              $("#addDepartmentModal .modal-title").replaceWith(
+                "Error saving data"
+              );
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            $("#addDepartmentModal .modal-title").replaceWith(
+              "Error saving data"
+            );
+          },
+        });
+      });
     } else {
       $("#addLocationModal").modal("show");
+      $("#addLocationForm").on("submit", function (e) {
+        e.preventDefault();
+        $.ajax({
+          url: "insertLocation.php",
+          type: "POST",
+          data: {
+            name: $("#addLocationName").val(),
+          },
+          success: function (result) {
+            var resultCode = result.status.code;
+            if (resultCode == 200) {
+              $("#addLocationModal").modal("hide");
+              $("#addLocationForm").off("submit");
+              $("#refreshBtn").click();
+            } else {
+              $("#addLocationModal .modal-title").replaceWith(
+                "Error saving data"
+              );
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            $("#addLocationModal .modal-title").replaceWith(
+              "Error saving data"
+            );
+          },
+        });
+      });
     }
   }
 });

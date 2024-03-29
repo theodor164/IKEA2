@@ -158,18 +158,110 @@ $("#filterBtn").click(function () {
 
 $("#addBtn").click(function () {
   // Replicate the logic of the refresh button click to open the add modal for the table that is currently on display
+  if ($("#personnelBtn").hasClass("active")) {
+    $("#addPersonnelModal").modal("show");
+    $.ajax({
+      url: "getAllDepartments.php",
+      type: "GET",
+      dataType: "json",
+      success: function (result) {
+        var resultCode = result.status.code;
+        if (resultCode == 200) {
+          $("#addPersonnelDepartment").html("");
+          $.each(result.data, function () {
+            $("#addPersonnelDepartment").append(
+              $("<option>", {
+                value: this.id,
+                text: this.name,
+              })
+            );
+          });
+        } else {
+          $("#addPersonnelDepartment").html(
+            "<option>No data available</option>"
+          );
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        $("#addPersonnelDepartment").html("<option>An error occurred</option>");
+      },
+    });
+    // Insert a new person into the personnel table
+    $("#addPersonnelForm").on("submit", function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: "getAll.php",
+        type: "GET",
+        dataType: "json",
+        success: function (result) {
+          var resultCode = result.status.code;
+          let maxId = 0;
+          if (resultCode == 200) {
+            result.data.forEach(function (item) {
+              if (item.id > maxId) {
+                maxId = item.id;
+              }
+            });
+          }
+          console.log(maxId);
+          $.ajax({
+            url: "insertPersonnel.php",
+            type: "POST",
+            data: {
+              id: parseInt(maxId) + 1,
+              firstName: $("#addPersonnelFirstName").val(),
+              lastName: $("#addPersonnelLastName").val(),
+              jobTitle: $("#addPersonnelJobTitle").val(),
+              email: $("#addPersonnelEmailAddress").val(),
+              departmentID: $("#addPersonnelDepartment").val(),
+            },
+            success: function (result) {
+              var resultCode = result.status.code;
+              if (resultCode == 200) {
+                $("#addPersonnelModal").modal("hide");
+                $("#refreshBtn").click();
+              } else {
+                $("#addPersonnelModal .modal-title").replaceWith(
+                  "Error saving data"
+                );
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              $("#addPersonnelModal .modal-title").replaceWith(
+                "Error saving data"
+              );
+            },
+          });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          $("#personnelTableBody").html(
+            "<tr><td colspan='7'>An error occurred</td></tr>"
+          );
+        },
+      });
+    });
+  } else {
+    if ($("#departmentsBtn").hasClass("active")) {
+      $("#addDepartmentModal").modal("show");
+    } else {
+      $("#addLocationModal").modal("show");
+    }
+  }
 });
 
 $("#personnelBtn").click(function () {
   // Call function to refresh personnel table
+  $("#refreshBtn").click();
 });
 
 $("#departmentsBtn").click(function () {
   // Call function to refresh department table
+  $("#refreshBtn").click();
 });
 
 $("#locationsBtn").click(function () {
   // Call function to refresh location table
+  $("#refreshBtn").click();
 });
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
@@ -272,7 +364,6 @@ $("#editLocationModal").on("show.bs.modal", function (e) {
     },
     success: function (result) {
       var resultCode = result.status.code;
-      console.log(result);
       if (resultCode == 200) {
         $("#editLocationID").val(result.data[0].id);
         $("#editLocationName").val(result.data[0].name);
@@ -315,9 +406,7 @@ $("#editPersonnelForm").on("submit", function (e) {
         $("#editPersonnelModal").modal("hide");
         $("#refreshBtn").click();
       } else {
-        $("#editPersonnelModal .modal-title").replaceWith(
-          "Error saving data"
-        );
+        $("#editPersonnelModal .modal-title").replaceWith("Error saving data");
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -329,7 +418,6 @@ $("#editPersonnelForm").on("submit", function (e) {
 $("#editDepartmentForm").on("submit", function (e) {
   e.preventDefault();
   // AJAX call to save form data
-  console.log('here');
   $.ajax({
     url: "editDepartment.php",
     type: "POST",
@@ -344,9 +432,7 @@ $("#editDepartmentForm").on("submit", function (e) {
         $("#editDepartmentModal").modal("hide");
         $("#refreshBtn").click();
       } else {
-        $("#editDepartmentModal .modal-title").replaceWith(
-          "Error saving data"
-        );
+        $("#editDepartmentModal .modal-title").replaceWith("Error saving data");
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {

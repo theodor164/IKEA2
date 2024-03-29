@@ -216,6 +216,9 @@ $("#refreshBtn").click(function () {
 $("#filterBtn").click(function () {
   // Open the filter modal
   $("#filterModal").modal("show");
+  $("#filterByDepartment").prop("checked", true);
+  $("#departmentFilter").css("display", "block");
+  $("#locationFilter").css("display", "none");
   $.ajax({
     url: "getAllDepartments.php",
     type: "GET",
@@ -306,6 +309,7 @@ $("#filterBtn").click(function () {
 $("input[name='filterBy']").change(function () {
   console.log("Radio button change detected."); // Debugging statement
   if ($("#filterByDepartment").is(":checked")) {
+    $("#filterForm").off("submit");
     $("#departmentFilter").css("display", "block");
     $("#locationFilter").css("display", "none");
     console.log("Filter by department selected."); // Debugging statement
@@ -338,9 +342,67 @@ $("input[name='filterBy']").change(function () {
         $("#filterDepartment").html("<option>An error occurred</option>");
       },
     });
+
+    $("#filterForm").submit(function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: "filterByDepartment.php",
+        type: "POST",
+        data: {
+          departmentID: $("#filterDepartment").val(),
+        },
+        success: function (result) {
+          console.log(result);
+          var resultCode = result.status.code;
+          if (resultCode == 200) {
+            $("#filterModal").modal("hide");
+            $("#personnelTableBody").html("");
+
+            $.each(result.data, function () {
+              $("#personnelTableBody").append(
+                '<tr><td class="align-middle text-nowrap">' +
+                  this.lastName +
+                  ", " +
+                  this.firstName +
+                  '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                  this.jobTitle +
+                  '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                  this.location +
+                  '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                  this.email +
+                  `</td><td class="text-end text-nowrap"><button
+                type="button"
+                class="btn btn-primary btn-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#editPersonnelModal"
+                data-id="${this.id}"
+              >
+                <i class="fa-solid fa-pencil fa-fw"></i>
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary btn-sm deletePersonnelBtn"
+                data-id="${this.id}"
+              >
+                <i class="fa-solid fa-trash fa-fw"></i>
+              </button>
+            </td>
+          </tr>`
+              );
+            });
+          } else {
+            $("#filterModal .modal-title").replaceWith("Error saving data");
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          $("#filterModal .modal-title").replaceWith("Error saving data");
+        },
+      });
+    });
   } else {
     console.log("Filter by location selected."); // Debugging statement
     // Load location data
+    $("#filterForm").off("submit");
     $("#departmentFilter").css("display", "none");
     $("#locationFilter").css("display", "block");
     $.ajax({
@@ -370,6 +432,63 @@ $("input[name='filterBy']").change(function () {
         console.log("Error loading location data:", textStatus, errorThrown); // Debugging statement
         $("#filterLocation").html("<option>An error occurred</option>");
       },
+    });
+
+    $("#filterForm").submit(function (e) {
+      e.preventDefault();
+      $.ajax({
+        url: "filterByLocation.php",
+        type: "POST",
+        data: {
+          locationID: $("#filterLocation").val(),
+        },
+        success: function (result) {
+          console.log(result);
+          var resultCode = result.status.code;
+          if (resultCode == 200) {
+            $("#filterModal").modal("hide");
+            $("#personnelTableBody").html("");
+
+            $.each(result.data, function () {
+              $("#personnelTableBody").append(
+                '<tr><td class="align-middle text-nowrap">' +
+                  this.lastName +
+                  ", " +
+                  this.firstName +
+                  '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                  this.jobTitle +
+                  '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                  this.location +
+                  '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+                  this.email +
+                  `</td><td class="text-end text-nowrap"><button
+              type="button"
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#editPersonnelModal"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-pencil fa-fw"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm deletePersonnelBtn"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-trash fa-fw"></i>
+            </button>
+          </td>
+        </tr>`
+              );
+            });
+          } else {
+            $("#filterModal .modal-title").replaceWith("Error saving data");
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          $("#filterModal .modal-title").replaceWith("Error saving data");
+        },
+      });
     });
   }
 });

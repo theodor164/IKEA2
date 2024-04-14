@@ -25,19 +25,20 @@ $("#searchInp").on("keyup", function () {
       if (resultCode == 200) {
         if ($("#personnelBtn").hasClass("active")) {
           $("#personnelTableBody").html("");
+          let rows = "";
           $.each(result.data.found, function () {
-            $("#personnelTableBody").append(
+            rows +=
               '<tr><td class="align-middle text-nowrap">' +
-                this.lastName +
-                ", " +
-                this.firstName +
-                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-                this.jobTitle +
-                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-                this.locationName +
-                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-                this.email +
-                `</td><td class="text-end text-nowrap"><button
+              this.lastName +
+              ", " +
+              this.firstName +
+              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+              this.jobTitle +
+              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+              this.locationName +
+              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+              this.email +
+              `</td><td class="text-end text-nowrap"><button
               type="button"
               class="btn btn-primary btn-sm"
               data-bs-toggle="modal"
@@ -54,9 +55,9 @@ $("#searchInp").on("keyup", function () {
               <i class="fa-solid fa-trash fa-fw"></i>
             </button>
           </td>
-        </tr>`
-            );
+        </tr>`;
           });
+          $("#personnelTableBody").append(rows);
         }
       }
     },
@@ -74,20 +75,20 @@ $("#refreshBtn").click(function () {
         var resultCode = result.status.code;
         if (resultCode == 200) {
           $("#personnelTableBody").html("");
-
+          let rows = "";
           $.each(result.data, function () {
-            $("#personnelTableBody").append(
+            rows +=
               '<tr><td class="align-middle text-nowrap">' +
-                this.lastName +
-                ", " +
-                this.firstName +
-                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-                this.jobTitle +
-                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-                this.location +
-                '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-                this.email +
-                `</td><td class="text-end text-nowrap"><button
+              this.lastName +
+              ", " +
+              this.firstName +
+              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+              this.jobTitle +
+              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+              this.location +
+              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+              this.email +
+              `</td><td class="text-end text-nowrap"><button
               type="button"
               class="btn btn-primary btn-sm"
               data-bs-toggle="modal"
@@ -104,9 +105,9 @@ $("#refreshBtn").click(function () {
               <i class="fa-solid fa-trash fa-fw"></i>
             </button>
           </td>
-        </tr>`
-            );
+        </tr>`;
           });
+          $("#personnelTableBody").append(rows);
         } else {
           $("#personnelTableBody").html(
             "<tr><td colspan='7'>No data available</td></tr>"
@@ -301,38 +302,39 @@ $("#filterPersonnelByDepartment").change(function () {
       var resultCode = result.status.code;
       if (resultCode == 200) {
         $("#personnelTableBody").html("");
+        let rows = "";
         $.each(result.data, function () {
-          $("#personnelTableBody").append(
+          rows +=
             '<tr><td class="align-middle text-nowrap">' +
-              this.lastName +
-              ", " +
-              this.firstName +
-              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-              this.jobTitle +
-              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-              this.location +
-              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-              this.email +
-              `</td><td class="text-end text-nowrap"><button
-            type="button"
-            class="btn btn-primary btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#editPersonnelModal"
-            data-id="${this.id}"
-          >
-            <i class="fa-solid fa-pencil fa-fw"></i>
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary btn-sm deletePersonnelBtn"
-            data-id="${this.id}"
-          >
-            <i class="fa-solid fa-trash fa-fw"></i>
-          </button>
-        </td>
-      </tr>`
-          );
+            this.lastName +
+            ", " +
+            this.firstName +
+            '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+            this.jobTitle +
+            '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+            this.location +
+            '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+            this.email +
+            `</td><td class="text-end text-nowrap"><button
+              type="button"
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#editPersonnelModal"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-pencil fa-fw"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm deletePersonnelBtn"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-trash fa-fw"></i>
+            </button>
+          </td>
+        </tr>`;
         });
+        $("#personnelTableBody").append(rows);
       } else {
         $("#personnelTableBody").html(
           "<tr><td colspan='7'>No data available</td></tr>"
@@ -357,38 +359,39 @@ $("#filterPersonnelByLocation").change(function () {
       var resultCode = result.status.code;
       if (resultCode == 200) {
         $("#personnelTableBody").html("");
+        let rows = "";
         $.each(result.data, function () {
-          $("#personnelTableBody").append(
+          rows +=
             '<tr><td class="align-middle text-nowrap">' +
-              this.lastName +
-              ", " +
-              this.firstName +
-              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-              this.jobTitle +
-              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-              this.location +
-              '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
-              this.email +
-              `</td><td class="text-end text-nowrap"><button
-            type="button"
-            class="btn btn-primary btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#editPersonnelModal"
-            data-id="${this.id}"
-          >
-            <i class="fa-solid fa-pencil fa-fw"></i>
-          </button>
-          <button
-            type="button"
-            class="btn btn-primary btn-sm deletePersonnelBtn"
-            data-id="${this.id}"
-          >
-            <i class="fa-solid fa-trash fa-fw"></i>
-          </button>
-        </td>
-      </tr>`
-          );
+            this.lastName +
+            ", " +
+            this.firstName +
+            '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+            this.jobTitle +
+            '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+            this.location +
+            '</td><td class="align-middle text-nowrap d-none d-md-table-cell">' +
+            this.email +
+            `</td><td class="text-end text-nowrap"><button
+              type="button"
+              class="btn btn-primary btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#editPersonnelModal"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-pencil fa-fw"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm deletePersonnelBtn"
+              data-id="${this.id}"
+            >
+              <i class="fa-solid fa-trash fa-fw"></i>
+            </button>
+          </td>
+        </tr>`;
         });
+        $("#personnelTableBody").append(rows);
       } else {
         $("#personnelTableBody").html(
           "<tr><td colspan='7'>No data available</td></tr>"
@@ -859,58 +862,83 @@ $(document).on("click", ".deleteDepartmentBtn", function () {
   // If it does, then don't delete the department
   // If it doesn't, then delete the department
   const departmentID = $(this).attr("data-id");
-  $("#deleteDepartmentModal").modal("show");
 
   $.ajax({
-    url: "./model/getDepartmentByID.php",
+    url: "./model/checkDepartmentUse.php",
     type: "POST",
-    dataType: "json",
     data: {
       id: departmentID,
     },
     success: function (result) {
       var resultCode = result.status.code;
       if (resultCode == 200) {
-        $("#department-name").html(result.data.department[0].name);
-      } else {
-        $("#department-name").html("Error retrieving data");
-      }
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      $("#department-name").html("Error retrieving data");
-    },
-  });
+        if (result.data[0].personnel_count > 0) {
+        $("#preventDeleteDepartmentModal").modal("show");
+        $("#personnel-count").html(result.data[0].personnel_count);
+        } else {
+          $("#deleteDepartmentModal").modal("show");
 
-  $("#deleteDepartmentBtn").click(function () {
-    $.ajax({
-      url: "./model/getAll.php",
-      type: "GET",
-      dataType: "json",
-      success: function (result) {
-        var resultCode = result.status.code;
-        if (resultCode == 200) {
-          var personnelExist = false;
-          result.data.forEach(function (item) {
-            if (parseInt(item.departmentID) === parseInt(departmentID)) {
-              personnelExist = true;
-              return;
-            }
+          $.ajax({
+            url: "./model/getDepartmentByID.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+              id: departmentID,
+            },
+            success: function (result) {
+              var resultCode = result.status.code;
+              if (resultCode == 200) {
+                $("#department-name").html(result.data.department[0].name);
+              } else {
+                $("#department-name").html("Error retrieving data");
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              $("#department-name").html("Error retrieving data");
+            },
           });
-          if (personnelExist) {
-            alert("Cannot delete department as personnel exist");
-            $("#deleteDepartmentModal").modal("hide");
-          } else {
+
+          $("#deleteDepartmentBtn").click(function () {
             $.ajax({
-              url: "./model/deleteDepartmentByID.php",
-              type: "POST",
-              data: {
-                id: departmentID,
-              },
+              url: "./model/getAll.php",
+              type: "GET",
+              dataType: "json",
               success: function (result) {
                 var resultCode = result.status.code;
                 if (resultCode == 200) {
-                  $("#refreshBtn").click();
-                  $("#deleteDepartmentModal").modal("hide");
+                  var personnelExist = false;
+                  result.data.forEach(function (item) {
+                    if (
+                      parseInt(item.departmentID) === parseInt(departmentID)
+                    ) {
+                      personnelExist = true;
+                      return;
+                    }
+                  });
+                  if (personnelExist) {
+                    alert("Cannot delete department as personnel exist");
+                    $("#deleteDepartmentModal").modal("hide");
+                  } else {
+                    $.ajax({
+                      url: "./model/deleteDepartmentByID.php",
+                      type: "POST",
+                      data: {
+                        id: departmentID,
+                      },
+                      success: function (result) {
+                        var resultCode = result.status.code;
+                        if (resultCode == 200) {
+                          $("#refreshBtn").click();
+                          $("#deleteDepartmentModal").modal("hide");
+                        } else {
+                          alert("Error deleting data");
+                        }
+                      },
+                      error: function (jqXHR, textStatus, errorThrown) {
+                        alert("Error deleting data");
+                      },
+                    });
+                  }
                 } else {
                   alert("Error deleting data");
                 }
@@ -919,15 +947,13 @@ $(document).on("click", ".deleteDepartmentBtn", function () {
                 alert("Error deleting data");
               },
             });
-          }
-        } else {
-          alert("Error deleting data");
+          });
         }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        alert("Error deleting data");
-      },
-    });
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      alert(errorThrown);
+    },
   });
 });
 

@@ -287,7 +287,10 @@
           </div>
           <div class="modal-body">
             <!-- Add your form or content here -->
-            <p>Are you sure you want to delete this location, <span id="location-name"></span>?</p>
+            <p>
+              Are you sure you want to delete this location,
+              <span id="location-name"></span>?
+            </p>
           </div>
           <div class="modal-footer">
             <button
@@ -331,7 +334,10 @@
           </div>
           <div class="modal-body">
             <!-- Add your form or content here -->
-            <p>Are you sure you want to delete this employee, <span id="employee-name"></span>?</p>
+            <p>
+              Are you sure you want to delete this employee,
+              <span id="employee-name"></span>?
+            </p>
           </div>
           <div class="modal-footer">
             <button
@@ -375,7 +381,10 @@
           </div>
           <div class="modal-body">
             <!-- Add your form or content here -->
-            <p>Are you sure you want to delete this department, <span id="department-name"></span>?</p>
+            <p>
+              Are you sure you want to delete this department,
+              <span id="department-name"></span>?
+            </p>
           </div>
           <div class="modal-footer">
             <button
@@ -852,6 +861,50 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <div
+      id="preventDeleteDepartmentModal"
+      class="modal fade"
+      tabindex="-1"
+      data-bs-backdrop="false"
+      role="dialog"
+      aria-labelledby="editLocationModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable"
+      >
+        <div class="modal-content shadow">
+          <div class="modal-header bg-primary bg-gradient text-white">
+            <h5 class="modal-title">Cannot delete</h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+
+          <div class="modal-body">
+            <!-- Add your form elements here -->
+            <p>
+              You cannot delete this item as it is currently in use. Please
+              remove all references to this item before trying again. There are <span id="personnel-count"></span> employees assigned to this department.
+            </p>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-outline-primary btn-sm myBtn"
+              data-bs-dismiss="modal"
+            >
+              CLOSE
+            </button>
+          </div>
+        </div>
+    </div>
     </div>
 
     <script src="./scripts/jquery-3.7.1.min.js"></script>

@@ -873,8 +873,8 @@ $(document).on("click", ".deleteDepartmentBtn", function () {
       var resultCode = result.status.code;
       if (resultCode == 200) {
         if (result.data[0].personnel_count > 0) {
-        $("#preventDeleteDepartmentModal").modal("show");
-        $("#personnel-count").html(result.data[0].personnel_count);
+          $("#preventDeleteDepartmentModal").modal("show");
+          $("#personnel-count").html(result.data[0].personnel_count);
         } else {
           $("#deleteDepartmentModal").modal("show");
 
@@ -964,46 +964,43 @@ $(document).on("click", ".deleteLocationBtn", function () {
   // If it does, then don't delete the location
   // If it doesn't, then delete the location
   const locationID = $(this).attr("data-id");
-  $("#deleteLocationModal").modal("show");
 
   $.ajax({
-    url: "./model/getLocationByID.php",
+    url: "./model/checkLocationUse.php",
     type: "POST",
-    dataType: "json",
     data: {
       id: locationID,
     },
     success: function (result) {
       var resultCode = result.status.code;
       if (resultCode == 200) {
-        $("#location-name").html(result.data[0].name);
-      } else {
-        $("#location-name").html("Error retrieving data");
-      }
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      $("#location-name").html("Error retrieving data");
-    },
-  });
+        if (result.data[0].department_count > 0) {
+          $("#preventDeleteLocationModal").modal("show");
+          $("#department-count").html(result.data[0].department_count);
+        } else {
+          $("#deleteLocationModal").modal("show");
 
-  $("#deleteLocationBtn").click(function () {
-    $.ajax({
-      url: "./model/getAllDepartments.php",
-      type: "GET",
-      dataType: "json",
-      success: function (result) {
-        var resultCode = result.status.code;
-        if (resultCode == 200) {
-          var departmentExist = false;
-          result.data.forEach(function (item) {
-            if (parseInt(item.locationID) === parseInt(locationID)) {
-              departmentExist = true;
-              return;
-            }
+          $.ajax({
+            url: "./model/getLocationByID.php",
+            type: "POST",
+            dataType: "json",
+            data: {
+              id: locationID,
+            },
+            success: function (result) {
+              var resultCode = result.status.code;
+              if (resultCode == 200) {
+                $("#location-name").html(result.data[0].name);
+              } else {
+                $("#location-name").html("Error retrieving data");
+              }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              $("#location-name").html("Error retrieving data");
+            },
           });
-          if (departmentExist) {
-            alert("Cannot delete location as departments exist");
-          } else {
+
+          $("#deleteLocationBtn").click(function () {
             $.ajax({
               url: "./model/deleteLocationByID.php",
               type: "POST",
@@ -1023,14 +1020,12 @@ $(document).on("click", ".deleteLocationBtn", function () {
                 alert("Error deleting data");
               },
             });
-          }
-        } else {
-          alert("Error deleting data");
+          });
         }
-      },
-      error: function (jqXHR, textStatus, errorThrown) {
-        alert("Error deleting data");
-      },
-    });
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      alert(errorThrown);
+    },
   });
 });

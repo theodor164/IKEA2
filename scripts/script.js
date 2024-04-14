@@ -14,7 +14,7 @@ $("#searchInp").on("keyup", function () {
   }
 
   $.ajax({
-    url: "SearchAll.php",
+    url: "./model/SearchAll.php",
     type: "POST",
     dataType: "json",
     data: {
@@ -66,7 +66,7 @@ $("#searchInp").on("keyup", function () {
 $("#refreshBtn").click(function () {
   if ($("#personnelBtn").hasClass("active")) {
     $.ajax({
-      url: "getAll.php",
+      url: "./model/getAll.php",
       type: "GET",
       dataType: "json",
       success: function (result) {
@@ -122,7 +122,7 @@ $("#refreshBtn").click(function () {
     if ($("#departmentsBtn").hasClass("active")) {
       // Refresh department table
       $.ajax({
-        url: "getAllDepartments.php",
+        url: "./model/getAllDepartments.php",
         type: "GET",
         dataType: "json",
         success: function (result) {
@@ -168,7 +168,7 @@ $("#refreshBtn").click(function () {
     } else {
       // Refresh location table
       $.ajax({
-        url: "getAllLocations.php",
+        url: "./model/getAllLocations.php",
         type: "GET",
         dataType: "json",
         success: function (result) {
@@ -220,7 +220,7 @@ $("#filterBtn").click(function () {
   $("#departmentFilter").css("display", "block");
   $("#locationFilter").css("display", "none");
   $.ajax({
-    url: "getAllDepartments.php",
+    url: "./model/getAllDepartments.php",
     type: "GET",
     dataType: "json",
     success: function (result) {
@@ -248,7 +248,7 @@ $("#filterBtn").click(function () {
   $("#filterForm").submit(function (e) {
     e.preventDefault();
     $.ajax({
-      url: "filterByDepartment.php",
+      url: "./model/filterByDepartment.php",
       type: "POST",
       data: {
         departmentID: $("#filterDepartment").val(),
@@ -310,7 +310,7 @@ $("input[name='filterBy']").change(function () {
     $("#locationFilter").css("display", "none");
     // Load department data
     $.ajax({
-      url: "getAllDepartments.php",
+      url: "./model/getAllDepartments.php",
       type: "GET",
       dataType: "json",
       success: function (result) {
@@ -339,7 +339,7 @@ $("input[name='filterBy']").change(function () {
     $("#filterForm").submit(function (e) {
       e.preventDefault();
       $.ajax({
-        url: "filterByDepartment.php",
+        url: "./model/filterByDepartment.php",
         type: "POST",
         data: {
           departmentID: $("#filterDepartment").val(),
@@ -397,7 +397,7 @@ $("input[name='filterBy']").change(function () {
     $("#departmentFilter").css("display", "none");
     $("#locationFilter").css("display", "block");
     $.ajax({
-      url: "getAllLocations.php",
+      url: "./model/getAllLocations.php",
       type: "GET",
       dataType: "json",
       success: function (result) {
@@ -426,7 +426,7 @@ $("input[name='filterBy']").change(function () {
     $("#filterForm").submit(function (e) {
       e.preventDefault();
       $.ajax({
-        url: "filterByLocation.php",
+        url: "./model/filterByLocation.php",
         type: "POST",
         data: {
           locationID: $("#filterLocation").val(),
@@ -486,7 +486,7 @@ $("#addBtn").click(function () {
   if ($("#personnelBtn").hasClass("active")) {
     $("#addPersonnelModal").modal("show");
     $.ajax({
-      url: "getAllDepartments.php",
+      url: "./model/getAllDepartments.php",
       type: "GET",
       dataType: "json",
       success: function (result) {
@@ -515,7 +515,7 @@ $("#addBtn").click(function () {
     $("#addPersonnelForm").on("submit", function (e) {
       e.preventDefault();
       $.ajax({
-        url: "getAll.php",
+        url: "./model/getAll.php",
         type: "GET",
         dataType: "json",
         success: function (result) {
@@ -529,7 +529,7 @@ $("#addBtn").click(function () {
             });
           }
           $.ajax({
-            url: "insertPersonnel.php",
+            url: "./model/insertPersonnel.php",
             type: "POST",
             data: {
               id: parseInt(maxId) + 1,
@@ -569,7 +569,7 @@ $("#addBtn").click(function () {
     if ($("#departmentsBtn").hasClass("active")) {
       $("#addDepartmentModal").modal("show");
       $.ajax({
-        url: "getAllLocations.php",
+        url: "./model/getAllLocations.php",
         type: "GET",
         dataType: "json",
         success: function (result) {
@@ -600,7 +600,7 @@ $("#addBtn").click(function () {
       $("#addDepartmentForm").on("submit", function (e) {
         e.preventDefault();
         $.ajax({
-          url: "insertDepartment.php",
+          url: "./model/insertDepartment.php",
           type: "POST",
           data: {
             name: $("#addDepartmentName").val(),
@@ -630,7 +630,7 @@ $("#addBtn").click(function () {
       $("#addLocationForm").on("submit", function (e) {
         e.preventDefault();
         $.ajax({
-          url: "insertLocation.php",
+          url: "./model/insertLocation.php",
           type: "POST",
           data: {
             name: $("#addLocationName").val(),
@@ -675,7 +675,7 @@ $("#locationsBtn").click(function () {
 
 $("#editPersonnelModal").on("show.bs.modal", function (e) {
   $.ajax({
-    url: "getPersonnelByID.php",
+    url: "./model/getPersonnelByID.php",
     type: "POST",
     dataType: "json",
     data: {
@@ -728,7 +728,7 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
 
 $("#editDepartmentModal").on("show.bs.modal", function (e) {
   $.ajax({
-    url: "getDepartmentByID.php",
+    url: "./model/getDepartmentByID.php",
     type: "POST",
     dataType: "json",
     data: {
@@ -765,7 +765,7 @@ $("#editDepartmentModal").on("show.bs.modal", function (e) {
 
 $("#editLocationModal").on("show.bs.modal", function (e) {
   $.ajax({
-    url: "getLocationByID.php",
+    url: "./model/getLocationByID.php",
     type: "POST",
     dataType: "json",
     data: {
@@ -799,7 +799,7 @@ $("#editPersonnelForm").on("submit", function (e) {
   // AJAX call to save form data
 
   $.ajax({
-    url: "editPersonnel.php",
+    url: "./model/editPersonnel.php",
     type: "POST",
     data: {
       id: $("#editPersonnelEmployeeID").val(),
@@ -828,7 +828,7 @@ $("#editDepartmentForm").on("submit", function (e) {
   e.preventDefault();
   // AJAX call to save form data
   $.ajax({
-    url: "editDepartment.php",
+    url: "./model/editDepartment.php",
     type: "POST",
     data: {
       id: $("#editDepartmentID").val(),
@@ -855,7 +855,7 @@ $("#editLocationForm").on("submit", function (e) {
   // AJAX call to save form data
 
   $.ajax({
-    url: "editLocation.php",
+    url: "./model/editLocation.php",
     type: "POST",
     data: {
       id: $("#editLocationID").val(),
@@ -885,7 +885,7 @@ $(document).on("click", ".deletePersonnelBtn", function () {
 
   $("#deletePersonnelBtn").click(function () {
     $.ajax({
-      url: "deletePersonnelByID.php",
+      url: "./model/deletePersonnelByID.php",
       type: "POST",
       data: {
         id: personnelID,
@@ -917,7 +917,7 @@ $(document).on("click", ".deleteDepartmentBtn", function () {
 
   $("#deleteDepartmentBtn").click(function () {
     $.ajax({
-      url: "getAll.php",
+      url: "./model/getAll.php",
       type: "GET",
       dataType: "json",
       success: function (result) {
@@ -935,7 +935,7 @@ $(document).on("click", ".deleteDepartmentBtn", function () {
             $("#deleteDepartmentModal").modal("hide");
           } else {
             $.ajax({
-              url: "deleteDepartmentByID.php",
+              url: "./model/deleteDepartmentByID.php",
               type: "POST",
               data: {
                 id: departmentID,
@@ -976,7 +976,7 @@ $(document).on("click", ".deleteLocationBtn", function () {
 
   $("#deleteLocationBtn").click(function () {
     $.ajax({
-      url: "getAllDepartments.php",
+      url: "./model/getAllDepartments.php",
       type: "GET",
       dataType: "json",
       success: function (result) {
@@ -993,7 +993,7 @@ $(document).on("click", ".deleteLocationBtn", function () {
             alert("Cannot delete location as departments exist");
           } else {
             $.ajax({
-              url: "deleteLocationByID.php",
+              url: "./model/deleteLocationByID.php",
               type: "POST",
               data: {
                 id: locationID,

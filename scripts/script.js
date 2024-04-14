@@ -64,6 +64,7 @@ $("#searchInp").on("keyup", function () {
 });
 
 $("#refreshBtn").click(function () {
+  $("#searchInp").val("");
   if ($("#personnelBtn").hasClass("active")) {
     $.ajax({
       url: "./model/getAll.php",
@@ -656,6 +657,11 @@ $("#addBtn").click(function () {
       });
     }
   }
+});
+
+$("document").ready(function () {
+  // Load personnel data
+  $("#refreshBtn").click();
 });
 
 $("#personnelBtn").click(function () {

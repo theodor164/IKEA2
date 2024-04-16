@@ -1,3 +1,6 @@
+var currentFilterDepartmentSelect = 0;
+var currentFilterLocationSelect = 0;
+
 $("#searchInp").on("keyup", function () {
   // your code
 
@@ -65,6 +68,10 @@ $("#searchInp").on("keyup", function () {
 });
 
 $("#refreshBtn").click(function () {
+  $("#filterPersonnelByDepartment").val(0);
+  $("#filterPersonnelByLocation").val(0);
+  currentFilterDepartmentSelect = 0;
+  currentFilterLocationSelect = 0;
   $("#searchInp").val("");
   if ($("#personnelBtn").hasClass("active")) {
     $.ajax({
@@ -229,15 +236,16 @@ $("#filterPersonnelModal").on("show.bs.modal", function (e) {
             value: 0,
             text: "All",
           })
-        );
-        $.each(result.data, function () {
-          $("#filterPersonnelByDepartment").append(
-            $("<option>", {
-              value: this.id,
-              text: this.name,
-            })
           );
-        });
+          $.each(result.data, function () {
+            $("#filterPersonnelByDepartment").append(
+              $("<option>", {
+                value: this.id,
+                text: this.name,
+              })
+              );
+            });
+            $("#filterPersonnelByDepartment").val(currentFilterDepartmentSelect);
       } else {
         $("#filterPersonnelByDepartment").html(
           "<option>No data available</option>"
@@ -273,6 +281,7 @@ $("#filterPersonnelModal").on("show.bs.modal", function (e) {
             })
           );
         });
+        $("#filterPersonnelByLocation").val(currentFilterLocationSelect);
       } else {
         $("#filterPersonnelByLocation").html(
           "<option>No data available</option>"
@@ -289,6 +298,8 @@ $("#filterPersonnelModal").on("show.bs.modal", function (e) {
 
 $("#filterPersonnelByDepartment").change(function () {
   // your code
+  currentFilterDepartmentSelect = $(this).val();
+  currentFilterLocationSelect = 0; // Reset location select
   $("#filterPersonnelByLocation").val(0);
   var departmentID = $(this).val();
   $.ajax({
@@ -346,6 +357,8 @@ $("#filterPersonnelByDepartment").change(function () {
 
 $("#filterPersonnelByLocation").change(function () {
   // your code
+  currentFilterLocationSelect = $(this).val(); // Update variable with selected value
+  currentFilterDepartmentSelect = 0; // Reset department select
   $("#filterPersonnelByDepartment").val(0);
   var locationID = $(this).val();
   $.ajax({

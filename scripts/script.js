@@ -549,6 +549,7 @@ $("#addBtn").click(function () {
           success: function (result) {
             var resultCode = result.status.code;
             if (resultCode == 200) {
+              $("#addDepartmentName").val("");
               $("#addDepartmentModal").modal("hide");
               $("#addDepartmentForm").off("submit");
               $("#refreshBtn").click();
@@ -578,6 +579,7 @@ $("#addBtn").click(function () {
           success: function (result) {
             var resultCode = result.status.code;
             if (resultCode == 200) {
+              $("#addLocationName").val("");
               $("#addLocationModal").modal("hide");
               $("#addLocationForm").off("submit");
               $("#refreshBtn").click();

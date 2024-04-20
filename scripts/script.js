@@ -236,16 +236,16 @@ $("#filterPersonnelModal").on("show.bs.modal", function (e) {
             value: 0,
             text: "All",
           })
+        );
+        $.each(result.data, function () {
+          $("#filterPersonnelByDepartment").append(
+            $("<option>", {
+              value: this.id,
+              text: this.name,
+            })
           );
-          $.each(result.data, function () {
-            $("#filterPersonnelByDepartment").append(
-              $("<option>", {
-                value: this.id,
-                text: this.name,
-              })
-              );
-            });
-            $("#filterPersonnelByDepartment").val(currentFilterDepartmentSelect);
+        });
+        $("#filterPersonnelByDepartment").val(currentFilterDepartmentSelect);
       } else {
         $("#filterPersonnelByDepartment").html(
           "<option>No data available</option>"
@@ -418,6 +418,7 @@ $("#addBtn").click(function () {
   // Replicate the logic of the refresh button click to open the add modal for the table that is currently on display
   if ($("#personnelBtn").hasClass("active")) {
     $("#addPersonnelModal").modal("show");
+
     $.ajax({
       url: "./model/getAllDepartments.php",
       type: "GET",
@@ -475,8 +476,14 @@ $("#addBtn").click(function () {
             success: function (result) {
               var resultCode = result.status.code;
               if (resultCode == 200) {
+                $("#addPersonnelFirstName").html("");
+                $("#addPersonnelFirstName").val("");
+                $("#addPersonnelLastName").val("");
+                $("#addPersonnelJobTitle").val("");
+                $("#addPersonnelEmailAddress").val("");
                 $("#addPersonnelModal").modal("hide");
                 $("#addPersonnelForm").off("submit");
+
                 $("#refreshBtn").click();
               } else {
                 $("#addPersonnelModal .modal-title").replaceWith(

@@ -457,8 +457,8 @@ $("#addBtn").click(function () {
           let maxId = 0;
           if (resultCode == 200) {
             result.data.forEach(function (item) {
-              if (item.id > maxId) {
-                maxId = item.id;
+              if (parseInt(item.id) > maxId) {
+                maxId = parseInt(item.id);
               }
             });
           }
@@ -466,7 +466,7 @@ $("#addBtn").click(function () {
             url: "./model/insertPersonnel.php",
             type: "POST",
             data: {
-              id: parseInt(maxId) + 1,
+              id: maxId + 1,
               firstName: $("#addPersonnelFirstName").val(),
               lastName: $("#addPersonnelLastName").val(),
               jobTitle: $("#addPersonnelJobTitle").val(),
